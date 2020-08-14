@@ -91,13 +91,14 @@ int guac_kubernetes_escape_url_component(char* output, int length,
 
 int guac_kubernetes_endpoint_attach(char* buffer, int length,
         const char* kubernetes_namespace, const char* kubernetes_pod,
-        const char* kubernetes_container) {
+        const char* kubernetes_container, const bool use_exec, const char* exec_shell) {
 
     int written;
 
     char escaped_namespace[GUAC_KUBERNETES_MAX_ENDPOINT_LENGTH];
     char escaped_pod[GUAC_KUBERNETES_MAX_ENDPOINT_LENGTH];
     char escaped_container[GUAC_KUBERNETES_MAX_ENDPOINT_LENGTH];
+    char escaped_exec_shell[GUAC_KUBERNETES_MAX_ENDPOINT_LENGTH];
 
     /* Escape Kubernetes namespace */
     if (guac_kubernetes_escape_url_component(escaped_namespace,

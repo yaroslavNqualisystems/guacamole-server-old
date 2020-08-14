@@ -48,6 +48,13 @@
 #define GUAC_KUBERNETES_DEFAULT_NAMESPACE "default"
 
 /**
+ * The name of the shell that should be used by default if no
+ * specific shell is provided.
+ */
+
+#define GUAC_KUBERNETES_DEFAULT_SHELL "/bin/sh"
+
+/**
  * The filename to use for the typescript, if not specified.
  */
 #define GUAC_KUBERNETES_DEFAULT_TYPESCRIPT_NAME "typescript" 
@@ -96,6 +103,16 @@ typedef struct guac_kubernetes_settings {
      * the first container in the pod.
      */
     char* kubernetes_container;
+
+    /**
+     * Whether exec call should be used, default attach.
+     */
+    bool use_exec;
+
+    /**
+     * Exec shell, default /bin/sh.
+     */
+    char* exec_shell;
 
     /**
      * Whether SSL/TLS should be used.
