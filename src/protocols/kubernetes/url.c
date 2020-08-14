@@ -89,9 +89,9 @@ int guac_kubernetes_escape_url_component(char* output, int length,
 
 }
 
-int guac_kubernetes_endpoint_attach(char* buffer, int length,
+int guac_kubernetes_endpoint_path(char* buffer, int length,
         const char* kubernetes_namespace, const char* kubernetes_pod,
-        const char* kubernetes_container, const bool use_exec, const char* exec_shell) {
+        const char* kubernetes_container, int use_exec, const char* exec_shell) {
 
     int written;
 
@@ -110,6 +110,10 @@ int guac_kubernetes_endpoint_attach(char* buffer, int length,
                 sizeof(escaped_pod), kubernetes_pod))
         return 1;
 
+    char* call = "attach";
+    if (use_exec)
+        call = "exec";
+    
     /* Generate attachment endpoint URL */
     if (kubernetes_container != NULL) {
 
@@ -119,15 +123,25 @@ int guac_kubernetes_endpoint_attach(char* buffer, int length,
             return 1;
 
         written = snprintf(buffer, length,
-                "/api/v1/namespaces/%s/pods/%s/attach"
+                "/api/v1/namespaces/%s/pods/%s/%s"
                 "?container=%s&stdin=true&stdout=true&tty=true",
-                escaped_namespace, escaped_pod, escaped_container);
+                escaped_namespace, escaped_pod, call, escaped_container);
     }
     else {
         written = snprintf(buffer, length,
-                "/api/v1/namespaces/%s/pods/%s/attach"
+                "/api/v1/namespaces/%s/pods/%s/%s"
                 "?stdin=true&stdout=true&tty=true",
-                escaped_namespace, escaped_pod);
+                escaped_namespace, escaped_pod, call);
+    }
+
+    if(use_exec){
+        if (guac_kubernetes_escape_url_component(escaped_exec_shell,
+                    sizeof(escaped_exec_shell), exec_shell))
+            return 1;
+        char command_arg[GUAC_KUBERNETES_MAX_ENDPOINT_LENGTH];
+        written+=snprintf(command_arg, sizeof(command_arg), "&command=%s", escaped_exec_shell);
+        strcat(buffer, command_arg);
+
     }
 
     /* Endpoint URL was successfully generated if it was written to the given
