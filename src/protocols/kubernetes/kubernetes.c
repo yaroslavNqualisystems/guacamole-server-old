@@ -213,7 +213,7 @@ void* guac_kubernetes_client_thread(void* data) {
     }
 
     /* Generate endpoint for attachment URL */
-    if (guac_kubernetes_endpoint_path(endpoint_path, sizeof(endpoint_path),
+    if (guac_kubernetes_endpoint_uri(endpoint_path, sizeof(endpoint_path),
                 settings->kubernetes_namespace,
                 settings->kubernetes_pod,
                 settings->kubernetes_container,

@@ -77,7 +77,7 @@ int guac_kubernetes_escape_url_component(char* output, int length,
  *     Zero if the endpoint path was successfully written to the provided
  *     buffer, non-zero if insufficient space exists within the buffer.
  */
-int guac_kubernetes_endpoint_path(char* buffer, int length,
+int guac_kubernetes_endpoint_uri(char* buffer, int length,
         const char* kubernetes_namespace, const char* kubernetes_pod,
         const char* kubernetes_container, int use_exec, const char* exec_shell);
 
