@@ -116,7 +116,7 @@ int guac_kubernetes_endpoint_uri(char* buffer, int length,
         call = "exec";
 
     char endpoint_path[GUAC_KUBERNETES_MAX_ENDPOINT_LENGTH];
-    snprintf(endpoint_path, GUAC_KUBERNETES_MAX_ENDPOINT_LENGTH, 
+    snprintf(endpoint_path, GUAC_KUBERNETES_MAX_ENDPOINT_LENGTH*3, 
     "/api/v1/namespaces/%s/pods/%s/%s", escaped_namespace, escaped_pod, call);
 
     /* Generate endpoint params */
